@@ -1,0 +1,43 @@
+class Solution {
+  public:
+  // Two pointers to keep track of the head of the DLL and the last visited node
+  Node *head = NULL, *lastNode = NULL;
+
+  // Helper function to perform in-order traversal and convert the binary tree to DLL
+  void help(Node *root) {
+      // Base case: if the current node (root) is NULL, return and do nothing
+      if (!root) {
+          return;
+      }
+
+      // Recursively traverse the left subtree
+      help(root->left);
+
+      // After the left subtree is fully processed, we process the current node
+      // If 'head' is NULL, this means we are visiting the first (leftmost) node, so we set it as the head of the DLL
+      if (!head) {
+          head = root;
+      }
+
+      // If 'lastNode' is not NULL, link the current node to the previous node (lastNode) in the DLL
+      if (lastNode) {
+          lastNode->right = root;  // Set the previous node's right pointer to the current node
+          root->left = lastNode;   // Set the current node's left pointer to the previous node
+      }
+
+      // Update 'lastNode' to the current node as we move through the in-order traversal
+      lastNode = root;
+
+      // Recursively traverse the right subtree
+      help(root->right);
+  }
+
+  // Function to convert a binary tree to a doubly linked list (DLL)
+  Node* bToDLL(Node* root) {
+      // Start the conversion by calling the helper function
+      help(root);
+
+      // Once the traversal is complete, return the head of the DLL
+      return head;
+  }
+};
